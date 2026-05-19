@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>project</title>
+
+<style>
+
+:root{
+    --blue:#4285f4;
+    --pink:#ff4d6d;
+    --mint:#b2f7ef;
+    --lavender:#e0dbff;
+    --gold:#ffef96;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+    font-family:'Segoe UI',Tahoma,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    overflow:hidden;
+    transition:background 2s ease;
+}
+
+/* ---------------- STAGE 1 ---------------- */
+
+#stage-1{
+    background:rgba(255,255,255,0.95);
+    padding:25px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    width:320px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+.checkbox-container{
+    width:28px;
+    height:28px;
+    border:2px solid #c1c1c1;
+    margin-right:15px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+    transition:0.2s;
+}
+
+.checkbox-container.checked{
+    border-color:#00aa00;
+}
+
+.checkbox-container.checked::after{
+    content:'✔';
+    color:#00aa00;
+    font-size:22px;
+}
+
+/* ---------------- STAGE 2 ---------------- */
+
+#stage-2{
+    display:none;
+    text-align:center;
+    color:white;
+}
+
+.envelope{
+    width:160px;
+    height:110px;
+    background:#ff4d6d;
+    position:relative;
+    cursor:pointer;
+    margin:0 auto;
+    border-radius:0 0 5px 5px;
+    transition:0.3s;
+    box-shadow:0 10px 20px rgba(0,0,0,0.2);
+}
+
+.envelope:hover{
+    transform:scale(1.1);
+}
+
+.envelope::after{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    border-left:80px solid transparent;
+    border-right:80px solid transparent;
+    border-top:55px solid #ff758f;
+}
+
+/* ---------------- STAGE 3 ---------------- */
+
+#stage-3{
+    display:none;
+    background:#fff;
+    padding:40px;
+    width:320px;
+    border-radius:15px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.4);
+    color:#333;
+    line-height:1.6;
+    border-top:8px solid var(--pink);
+}
+
+.vanish{
+    animation:vanishToCenter 0.8s forwards ease-in;
+}
+
+@keyframes vanishToCenter{
+    to{
+        transform:scale(0) rotate(-15deg);
+        opacity:0;
+    }
+}
+
+/* ---------------- STAGE 4 ---------------- */
+
+#stage-4{
+    display:none;
+    text-align:center;
+    z-index:10;
+}
+
+.cake-box{
+    position:relative;
+    width:200px;
+    margin:0 auto;
+}
+
+.layer{
+    border-radius:10px 10px 2px 2px;
+    margin:0 auto;
+}
+
+.layer-1{
+    width:180px;
+    height:60px;
+    background:#ff4d6d;
+    box-shadow:inset 0 -10px rgba(0,0,0,0.1);
+}
+
+.layer-2{
+    width:130px;
+    height:50px;
+    background:#ff758f;
+    box-shadow:inset 0 -10px rgba(0,0,0,0.1);
+}
+
+.candle{
+    width:12px;
+    height:35px;
+    background:linear-gradient(to right,var(--lavender),#fff);
+    margin:0 auto;
+    position:relative;
+    border-radius:3px;
+}
+
+.flame{
+    width:18px;
+    height:26px;
+    background:radial-gradient(#fff,#ffcc00,orange);
+    border-radius:50% 50% 20% 20%;
+    position:absolute;
+    top:-28px;
+    left:-3px;
+    cursor:pointer;
+    box-shadow:0 0 20px #ffcc00,0 0 40px orange;
+    animation:flicker 0.1s infinite alternate;
+}
+
+@keyframes flicker{
+    from{
+        transform:scale(1) rotate(-1deg);
+    }
+    to{
+        transform:scale(1.1) rotate(1deg);
+    }
+}
+
+/* ---------------- FALLING ITEMS ---------------- */
+
+.vibe{
+    position:fixed;
+    top:-100px;
+    pointer-events:none;
+    z-index:999;
+    will-change:transform;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- STAGE 1 -->
+<div id="stage-1">
+
+    <div class="checkbox-container" id="captcha" onclick="verify()"></div>
+
+    <div style="flex-grow:1;font-size:15px;color:#555;font-weight:500;">
+        I'm not a robot
+    </div>
+
+    <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" width="30">
+
+</div>
+
+<!-- STAGE 2 -->
+<div id="stage-2">
+
+    <div class="envelope" onclick="openLetter()"></div>
+
+    <p style="margin-top:30px;font-size:1.1rem;letter-spacing:1px;">
+        Access Granted. Tap to open message.
+    </p>
+
+</div>
+
+<!-- STAGE 3 -->
+<div id="stage-3">
+
+    <p><strong>To my one of the FAV person in the planet,</strong></p>
+
+    <p>
+        നമ്മൾ കണ്ടുമുട്ടിയത് തികച്ചും അപ്രതീക്ഷിതമായി മാത്രം ആയിട്ടാണ്.
+        ഒരുപേക്ഷ ഇങ്ങനെ കണ്ടുമുട്ടാൻപോലും ഒരു വഴിപോലും 
+        ഇല്ലാത്ത 2 ആളുകൾ അവർ അവർപോലും അറിയാത്ത രീതിയിൽ 
+        close ആയങ്കിൽ maybe ലിസ്റ് ജന്മത്തിലോ അതോ ഇനി വരാൻപോകുന്ന 
+        ജന്മത്തിലോ ബന്ധമുള്ളൊണ്ട് ആകാം. 
+    </p>
+
+    <p>
+        Thanks for being an absolute vibe.🤗 
+        My small world is better because you're a part of it. 😍❤️
+    </p>
+
+    <p><strong>Stay awesome.</strong></p>
+
+</div>
+
+<!-- STAGE 4 -->
+<div id="stage-4">
+
+    <h1 id="bday-text"
+        style="color:white;margin-bottom:50px;text-shadow:0 0 20px var(--pink);">
+        Make a wish!
+    </h1>
+
+    <div class="cake-box">
+
+        <div class="candle">
+            <div class="flame" id="flame" onclick="blowOut()"></div>
+        </div>
+
+        <div class="layer layer-2"></div>
+        <div class="layer layer-1"></div>
+
+    </div>
+
+    <p id="instruction"
+       style="color:rgba(255,255,255,0.6);margin-top:40px;">
+       (CLICK THE FLAME TO BLOW)
+    </p>
+
+</div>
+
+<script>
+
+/* ---------------- VERIFY ---------------- */
+
+function verify(){
+
+    document
+        .getElementById('captcha')
+        .classList.add('checked');
+
+    setTimeout(()=>{
+
+        document.getElementById('stage-1').style.display='none';
+        document.getElementById('stage-2').style.display='block';
+
+    },800);
+}
+
+/* ---------------- OPEN LETTER ---------------- */
+
+function openLetter(){
+
+    document.getElementById('stage-2').style.display='none';
+
+    document.getElementById('stage-3').style.display='block';
+
+    setTimeout(()=>{
+
+        const letter=document.getElementById('stage-3');
+
+        letter.classList.add('vanish');
+
+        setTimeout(()=>{
+
+            letter.style.display='none';
+
+            document.getElementById('stage-4').style.display='block';
+
+        },800);
+
+    },20000);
+}
+
+/* ---------------- BLOW CANDLE ---------------- */
+
+function blowOut(){
+
+    document.getElementById('flame').style.display='none';
+
+    document.getElementById('instruction').style.display='none';
+
+    document.getElementById('bday-text').innerText='HAPPY BIRTHDAY!💖 MY DEAR MEEMOOOOKUTTA 😘😘😘';
+
+    document.getElementById('bday-text').style.color='var(--mint)';
+
+    document.body.style.background=
+        'radial-gradient(circle,#2b0030 0%,#000000 100%)';
+
+    startInfiniteRain();
+}
+
+/* ---------------- FALLING EFFECT ---------------- */
+
+function startInfiniteRain(){
+
+    const vibes=[
+        '❤️','💖','✨','🎁',
+        '🎈','🥂','🍰','🌟',
+        '🤣','🔥'
+    ];
+
+    // ADD YOUR SMALL PHOTOS HERE
+    const miniImages=[
+        'images/1.jpg',
+        'images/2.jpg',
+        'images/3.jpg',
+        'images/4.jpg',
+        'images/5.jpg',
+        'images/6.jpg'
+    ];
+
+    const colors=[
+        '#b2f7ef',
+        '#ffef96',
+        '#f7d1cd',
+        '#e0dbff',
+        '#ffffff'
+    ];
+
+    setInterval(()=>{
+
+        const drop=document.createElement('div');
+
+        drop.className='vibe';
+
+        const randomType=Math.random();
+
+        /* ---------- IMAGES ---------- */
+
+        if(randomType < 0.35){
+
+            const img=document.createElement('img');
+
+            img.src=
+                miniImages[
+                    Math.floor(
+                        Math.random()*miniImages.length
+                    )
+                ];
+
+            img.style.width='55px';
+            img.style.height='55px';
+            img.style.objectFit='cover';
+            img.style.borderRadius='12px';
+            img.style.border='2px solid white';
+            img.style.boxShadow=
+                '0 0 15px rgba(255,255,255,0.5)';
+
+            drop.appendChild(img);
+        }
+
+        /* ---------- GLOWING DOTS ---------- */
+
+        else if(randomType < 0.50){
+
+            drop.style.width='10px';
+            drop.style.height='10px';
+            drop.style.borderRadius='50%';
+
+            const color=
+                colors[
+                    Math.floor(
+                        Math.random()*colors.length
+                    )
+                ];
+
+            drop.style.background=color;
+
+            drop.style.boxShadow=
+                `0 0 15px ${color}`;
+        }
+
+        /* ---------- EMOJIS ---------- */
+
+        else{
+
+            drop.innerText=
+                vibes[
+                    Math.floor(
+                        Math.random()*vibes.length
+                    )
+                ];
+
+            drop.style.fontSize=
+                Math.random()*20 + 20 + 'px';
+        }
+
+        drop.style.left=Math.random()*100 + 'vw';
+
+        document.body.appendChild(drop);
+
+        const duration=
+            Math.random()*4000 + 5000;
+
+        drop.animate([
+
+            {
+                transform:'translateY(-100px) rotate(0deg)',
+                opacity:1
+            },
+
+            {
+                transform:
+                `translateY(120vh)
+                 translateX(${Math.random()*200-100}px)
+                 rotate(${Math.random()*720}deg)`,
+
+                opacity:0
+            }
+
+        ],{
+
+            duration:duration,
+            easing:'linear'
+
+        });
+
+        setTimeout(()=>{
+            drop.remove();
+        },duration);
+
+    },120);
+}
+
+</script>
+
+</body>
+</html>
